@@ -14,27 +14,23 @@ namespace Wunderwunsch.HexMapLibrary.Examples
         //you will find the prefabs and materials used here in the "NonScriptAssets folder or of the package.
         [SerializeField] private int mapSize = 10; // the mapSize, can be set in inspector 
         [SerializeField] private GameObject tilePrefab = null; // the prefab we use for each Tile -> use TilePrefab.prefab 
-        //[SerializeField] private GameObject edgePrefab = null; // the prefab we use for each Edge -> use EdgePrefab.prefab 
         [SerializeField] private GameObject tileMarker = null; // a GameObject we use to show the current mouse position -> create an instance of TileMarker.prefab and reference it in the inspector
-        //[SerializeField] private GameObject edgeMarker = null; // a GameObject we use to we show the closest edge to the current mouse position  -> create an instance of EdgeMarker.prefab and reference it in the inspector
-        //[SerializeField] private GameObject cornerMarker = null; // a GameObject we use to show the closest corner to the current mouse position  -> create an instance of CornerMarker.prefab and reference it in the inspector
         [SerializeField] private List<Material> materials = null; // the materials we want to assign to the tiles for visualisation purposes -> set size to 4 in inspector and add TileMat1 to TileMat4
         private HexMap<int,bool> hexMap; // our map. For this example we create a map where an integer represents the data of each tile and a bool the data of each edge
-        private HexMouse hexMouse = null; // the HexMouse component we add to keep track of the mouse position
         private GameObject[] tileObjects; // this will contain all the GameObjects for visualisation purposes, their array index corresponds with the index of our Tiles
 
+        [SerializeField] private HexPlayerPosition hexPlayer = null;
 
         void Start ()
         {
-            hexMap = new HexMap<int, bool>(HexMapBuilder.CreateHexagonalShapedMap(mapSize), null);  //creates a HexMap using one of the pre-defined shapes in the static MapBuilder Class            
-            hexMouse = gameObject.AddComponent<HexMouse>(); //we attach the HexMouse script to the same gameObject this script is attached to, could also attach it anywhere else
-            hexMouse.Init(hexMap); //initializes the HexMouse 
+            hexMap = new HexMap<int, bool>(HexMapBuilder.CreateHexagonalShapedMap(mapSize), null);  //creates a HexMap using one of the pre-defined shapes in the static MapBuilder Class  
+            hexPlayer.Init(hexMap);
             tileObjects = new GameObject[hexMap.TilesByPosition.Count]; //creates an array with the size equal to the number on tiles of the map
 
             foreach (var tile in hexMap.Tiles) //loops through all the tiles, assigns them a random value and instantiates and positions a gameObject for each of them.
             {
                 tile.Data = (Random.Range(0, 4));
-                GameObject instance = GameObject.Instantiate(tilePrefab);
+                GameObject instance = GameObject.Instantiate(tilePrefab, transform);
                 instance.GetComponent<Renderer>().material = materials[tile.Data];
                 instance.name = "MapTile_" + tile.Position;
                 instance.transform.position = tile.CartesianPosition;
@@ -46,11 +42,11 @@ namespace Wunderwunsch.HexMapLibrary.Examples
 
         void Update ()
         { 
-            if (!hexMouse.CursorIsOnMap) return; // if we are not on the map we won't do anything so we can return
+            if (!hexPlayer.CursorIsOnMap) return; // if we are not on the map we won't do anything so we can return
 
-            Vector3Int mouseTilePosition = hexMouse.TileCoord;
-            Vector3Int mouseEdgePosition = hexMouse.ClosestEdgeCoord;
-            Vector3Int mouseCornerPosition = hexMouse.ClosestCornerCoord;
+            Vector3Int mouseTilePosition = hexPlayer.TileCoord;
+            //Vector3Int mouseEdgePosition = hexMouse.ClosestEdgeCoord;
+            //Vector3Int mouseCornerPosition = hexMouse.ClosestCornerCoord;
 
             //update the marker positions
             tileMarker.transform.position = HexConverter.TileCoordToCartesianCoord(mouseTilePosition, 0.1f); //we put our tile marker on the tile our mouse is on
