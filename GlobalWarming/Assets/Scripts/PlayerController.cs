@@ -30,11 +30,17 @@ public class PlayerController : MonoBehaviour {
         float xThrow = Input.GetAxis("HorizontalMove");
         float yThrow = Input.GetAxis("VerticalMove");
 
-        float xOffset = xThrow * moveSpeed * Time.deltaTime;
-        float yOffset = yThrow * moveSpeed * Time.deltaTime;
-        
-        Vector3 movementVector = new Vector3(xOffset, 0f, yOffset);
-        transform.Translate(movementVector);
+        // Only do things if there is an input
+        if (Mathf.Abs(xThrow) > Mathf.Epsilon || Mathf.Abs(yThrow) > Mathf.Epsilon)
+        {
+
+            float xOffset = xThrow * moveSpeed * Time.deltaTime;
+            float yOffset = yThrow * moveSpeed * Time.deltaTime;
+
+            Vector3 movementVector = new Vector3(xOffset, 0f, yOffset);
+            transform.Translate(movementVector, Space.World);
+            transform.rotation = Quaternion.LookRotation(movementVector.normalized);
+        }
     }
 
     private void ProcessCamera()
