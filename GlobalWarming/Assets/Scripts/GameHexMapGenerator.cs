@@ -66,10 +66,10 @@ public class GameHexMapGenerator : MonoBehaviour
         //edgeMarker.transform.rotation = Quaternion.Euler(0, hexMap.EdgesByPosition[mouseEdgePosition].EdgeAlignmentAngle, 0); //we set the rotation of the edge marker
         //cornerMarker.transform.position = HexConverter.CornerCoordToCartesianCoord(mouseCornerPosition);
 
-        if (Input.GetMouseButtonDown(0)) // change a tile when clicked on it
+        if (Input.GetButtonDown("ConfirmButton"))
         {
             Tile<int> t = hexMap.TilesByPosition[playerTilePosition]; // select the tile the player is looking at
-            
+            print(tilePrefabs[t.Data].name);
             //Tile<int> t = hexMap.TilesByPosition[mouseTilePosition]; //we select the tile our mouse is on
             //int curValue = t.Data; //we grab the current value of the tile
             //t.Data = ((curValue + 1) % 4); //we increment it and use modulo to keep it between 0 and 3
