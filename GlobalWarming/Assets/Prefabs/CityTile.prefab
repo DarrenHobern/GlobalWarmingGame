@@ -28,7 +28,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1752008957146982
 GameObject:
   m_ObjectHideFlags: 0
@@ -183,7 +183,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7a393bdf4b58bd4d9ae2bd80bd93233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  population: 50000
+  humanPopulation: 0
+  floraPopulation: 0
+  faunaPopulation: 0
   regionName: Wellington
   health: 100
   type: 0

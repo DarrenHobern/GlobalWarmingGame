@@ -1,19 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Wunderwunsch.HexMapLibrary;
+using Wunderwunsch.HexMapLibrary.Generic;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour {
 
     [SerializeField] float moveSpeed = 2f;
+    [SerializeField] GameObject tileMarker;
 
-    Rigidbody rb;
-    bool controlEnabled = true;
+    private GameController gameController;
+    private HexMap<Environment> hexMap;
+    private HexPlayerPosition hexPlayer;
+    private Vector3Int playerTilePosition;
+    private bool controlEnabled = true;
 
 	// Use this for initialization
 	void Start () {
-        rb = GetComponent<Rigidbody>();	
-	}
+        gameController = FindObjectOfType<GameController>();
+        hexMap = gameController.FindPlayerMap(transform.position);
+        hexPlayer = GetComponentInChildren<HexPlayerPosition>();
+        hexPlayer.Init(hexMap);
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -41,6 +50,13 @@ public class PlayerController : MonoBehaviour {
             transform.Translate(movementVector, Space.World);
             transform.rotation = Quaternion.LookRotation(movementVector.normalized);
         }
+
+        if (!hexPlayer.CursorIsOnMap) return; // if we are not on the map we won't do anything so we can return
+
+        playerTilePosition = hexPlayer.TileCoord;
+
+        tileMarker.transform.position = HexConverter.TileCoordToCartesianCoord(playerTilePosition, 0.1f); //we put our tile marker on the tile in front of the player
+
     }
 
     private void ProcessCamera()
@@ -53,10 +69,19 @@ public class PlayerController : MonoBehaviour {
 
     private void ProcessActions()
     {
-        float confirmButton = Input.GetAxisRaw("ConfirmButton");
-        float cancelButton = Input.GetAxisRaw("CancelButton");
-        float actionButton = Input.GetAxisRaw("ActionButton");
-        float menuNavButton = Input.GetAxisRaw("MenuNavButton");
-        
+        bool confirmButton = Input.GetButtonDown("ConfirmButton"); // defaults X  || A
+        bool cancelButton = Input.GetButtonDown("CancelButton");  // default O    || B
+        bool actionButton = Input.GetButtonDown("ActionButton");  // default Sqr  || X
+        float menuNavButton = Input.GetAxisRaw("MenuNavButton");  // default R1L1 || RBLB // float so we can use +- values for left and right. 
+
+
+        if (confirmButton)
+        {
+            if (hexPlayer.CursorIsOnMap)
+            {
+                Tile<Environment> t = hexMap.TilesByPosition[playerTilePosition]; // select the tile the player is looking at
+                print(t.Data.GetEnvironmentStats());
+            }
+        }
     }
 }

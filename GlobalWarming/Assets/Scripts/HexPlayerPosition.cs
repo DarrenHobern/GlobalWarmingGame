@@ -5,12 +5,12 @@ using UnityEngine;
 namespace Wunderwunsch.HexMapLibrary
 {
     /// <summary>
-    /// Updates every frame with the position of the mouse cursor on the XZ-Plane in different coordinate systems. 
+    /// Updates every frame with the position of the Player's pointer on the XZ-Plane in different coordinate systems. 
     /// </summary>
     public class HexPlayerPosition : MonoBehaviour
     {
         /// <summary>
-        /// Map which is assigned to the mouse - should always be the current visible map in cases where you have multiple maps.
+        /// Map which is assigned to the player - should always be the current visible map in cases where you have multiple maps.
         /// if it is null then it will just skip map wrapping and clamping.
         /// </summary>
         private HexMap hexMap;
@@ -98,15 +98,6 @@ namespace Wunderwunsch.HexMapLibrary
         {
             this.hexMap = hexMap;
             UpdatePlayerPositionData();
-            plane = new Plane(Vector3.up,0);
-        }
-
-        /// <summary>
-        /// returns the cartesian of the mouse, using the active Camera and casting a ray on the XZ-plane
-        /// </summary>
-        private Vector3 GetPlanePosition()
-        {
-            return transform.position;
         }
 
 
@@ -116,8 +107,8 @@ namespace Wunderwunsch.HexMapLibrary
         private void UpdatePlayerPositionData()
         {
             CursorIsOnMap = false;
-            CartesianCoordInfiniteGrid = GetPlanePosition();
-            CartesianCoordWrapped = CartesianCoordInfiniteGrid;
+            CartesianCoordInfiniteGrid = transform.position;
+            CartesianCoordWrapped = transform.position;
 
             CubeCoordRaw = HexConverter.CartesianCoordToTileCoord(CartesianCoordInfiniteGrid);
             TileCoord = CubeCoordRaw;
