@@ -7,7 +7,7 @@ namespace Wunderwunsch.HexMapLibrary
     /// <summary>
     /// Updates every frame with the position of the Player's pointer on the XZ-Plane in different coordinate systems. 
     /// </summary>
-    public class HexPlayerPosition : MonoBehaviour
+    public class HexPosition : MonoBehaviour
     {
         /// <summary>
         /// Map which is assigned to the player - should always be the current visible map in cases where you have multiple maps.

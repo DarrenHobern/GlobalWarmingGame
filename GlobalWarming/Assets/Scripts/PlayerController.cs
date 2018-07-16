@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour {
 
     private GameController gameController;
     private HexMap<Environment> hexMap;
-    private HexPlayerPosition hexPlayer;
+    private HexPosition hexPlayer;
     private Vector3Int playerTilePosition;
     private bool controlEnabled = true;
 
@@ -20,7 +20,8 @@ public class PlayerController : MonoBehaviour {
 	void Start () {
         gameController = FindObjectOfType<GameController>();
         hexMap = gameController.FindPlayerMap(transform.position);
-        hexPlayer = GetComponentInChildren<HexPlayerPosition>();
+        Debug.Assert(hexMap != null);  // This wont always be true need to fix TODO
+        hexPlayer = GetComponentInChildren<HexPosition>();
         hexPlayer.Init(hexMap);
     }
 	
