@@ -53,7 +53,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1296026133314478}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13.72, y: 0, z: 12.11}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4970208915342378}
@@ -96,14 +96,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44759b79215f2cf48ac60d5afe874b88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  element:
-    fire: 0
-    water: 0
-    earth: 0
-    air: 1
-    ice: 0
-    disease: 0
-    electricity: 0
+  radius: 0
+  strength: 1
 --- !u!114 &114894527731434006
 MonoBehaviour:
   m_ObjectHideFlags: 1

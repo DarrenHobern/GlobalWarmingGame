@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Wunderwunsch.HexMapLibrary;
+using Wunderwunsch.HexMapLibrary.Generic;
 
-/// <summary>
-/// TODO make strenght-weakness table so picking a strength automatically indicates its weaknesses.
-///      Also disallow picking clashing elements... maybe
-/// </summary>
+
 //[System.Serializable]
 //public class Element
 //{
@@ -23,23 +21,56 @@ using Wunderwunsch.HexMapLibrary;
 
 public class Disaster : MonoBehaviour {
 
-    protected HexMap hexMap;
+    private HexMap<Environment> hexMap;
+    [SerializeField] private int radius = 0;
+    public int Radius
+    {
+        get
+        {
+            return this.radius;
+        }
+        private set
+        {
+            this.radius = value;
+        }
+    }
+
+    [SerializeField] private int strength = 1;
+    public int Strength
+    {
+        get
+        {
+            return this.strength;
+        }
+        private set
+        {
+            this.strength = value;
+        }
+    }
+
     public HexPosition Position { get; private set; }
-    public int Strength { get; private set; }
-    public int Radius { get; private set; }
 
     private void Start()
     {
-        
+        Position = GetComponent<HexPosition>();
+    }
+    private void Update()
+    {
+
+        DamageAffectedTiles();
     }
 
     /// <summary>
     /// Initialise the map, this needs to be done immediately after instantiation.
     /// </summary>
     /// <param name="map"></param>
-    public void InitMap(HexMap map)
+    public void InitMap(HexMap<Environment> map)
     {
-        hexMap = map;
+        this.hexMap = map;
+        if (Position == null)
+        {
+            Position = GetComponent<HexPosition>();
+        }
         Position.Init(hexMap);
     }
 
@@ -49,11 +80,17 @@ public class Disaster : MonoBehaviour {
     /// </summary>
     private void DamageAffectedTiles()
     {
-        // get all the affected tiles
-        // get the tile the diaster is on from the hexmap and hexposition,
-        // get the environment type
-        // deal damage to the populations and tile
+        if (!Position.CursorIsOnMap) return;
 
+        // get all the affected tiles
+        List<Vector3Int> affectedTiles = hexMap.GetTilePositions.Disc(Position.TileCoord, Radius, true);
+        foreach (Vector3Int tilePos in affectedTiles)
+        {
+            // get the environment type
+            print(hexMap.Tiles[hexMap.TileIndexByPosition[tilePos]].Data.GetEnvironmentStats());
+            // deal damage to the populations and tile
+            
+        }
     }
 
     /// <summary>

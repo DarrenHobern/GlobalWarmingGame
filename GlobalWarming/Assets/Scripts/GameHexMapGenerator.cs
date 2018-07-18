@@ -18,7 +18,7 @@ public class GameHexMapGenerator : MonoBehaviour
     /// Generates a new HexMap of environments, at the given offset
     /// </summary>
     /// <returns>The generated map</returns>
-    public HexMap GenerateMap (int offset)
+    public HexMap<Environment> GenerateMap (int offset)
     {
         Debug.Assert(tilePrefabs != null);
 

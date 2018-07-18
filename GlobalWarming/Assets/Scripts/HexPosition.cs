@@ -122,7 +122,7 @@ namespace Wunderwunsch.HexMapLibrary
             ClosestCornerCoordInfiniteGrid = HexConverter.CartesianCoordToClosestCornerCoord(CartesianCoordInfiniteGrid);
             ClosestCornerCoord = ClosestCornerCoordInfiniteGrid;
 
-            SelectionRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+            //SelectionRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 
             if (hexMap != null)
@@ -139,6 +139,14 @@ namespace Wunderwunsch.HexMapLibrary
                 ClosestEdgeCoord = HexConverter.CartesianCoordToClosestEdgeCoord(CartesianCoordWrapped);
                 ClosestCornerCoord = HexConverter.CartesianCoordToClosestCornerCoord(CartesianCoordWrapped);             
             }
+        }
+
+        public Vector3 GetRealPosition()
+        {
+            if (!CursorIsOnMap)
+                return Vector3.zero;
+
+            return HexConverter.TileCoordToCartesianCoord(TileCoord, 0.1f); //we put our tile marker on the tile in front of the player
         }
     }
 }

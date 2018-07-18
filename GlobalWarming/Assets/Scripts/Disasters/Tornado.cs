@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Wunderwunsch.HexMapLibrary;
+using Wunderwunsch.HexMapLibrary.Generic;
 
 [RequireComponent(typeof(HexPosition))]
 public class Tornado : MonoBehaviour {

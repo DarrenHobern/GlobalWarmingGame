@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour {
 
     private GameController gameController;
     private HexMap<Environment> hexMap;
-    private HexPosition hexPlayer;
+    private HexPosition hexPosition;
     private Vector3Int playerTilePosition;
     private bool controlEnabled = true;
 
@@ -21,8 +21,8 @@ public class PlayerController : MonoBehaviour {
         gameController = FindObjectOfType<GameController>();
         hexMap = gameController.FindPlayerMap(transform.position);
         Debug.Assert(hexMap != null);  // This wont always be true need to fix TODO
-        hexPlayer = GetComponentInChildren<HexPosition>();
-        hexPlayer.Init(hexMap);
+        hexPosition = GetComponentInChildren<HexPosition>();
+        hexPosition.Init(hexMap);
     }
 	
 	// Update is called once per frame
@@ -52,11 +52,8 @@ public class PlayerController : MonoBehaviour {
             transform.rotation = Quaternion.LookRotation(movementVector.normalized);
         }
 
-        if (!hexPlayer.CursorIsOnMap) return; // if we are not on the map we won't do anything so we can return
 
-        playerTilePosition = hexPlayer.TileCoord;
-
-        tileMarker.transform.position = HexConverter.TileCoordToCartesianCoord(playerTilePosition, 0.1f); //we put our tile marker on the tile in front of the player
+        tileMarker.transform.position = hexPosition.GetRealPosition();
 
     }
 
@@ -78,7 +75,7 @@ public class PlayerController : MonoBehaviour {
 
         if (confirmButton)
         {
-            if (hexPlayer.CursorIsOnMap)
+            if (hexPosition.CursorIsOnMap)
             {
                 Tile<Environment> t = hexMap.TilesByPosition[playerTilePosition]; // select the tile the player is looking at
                 print(t.Data.GetEnvironmentStats());

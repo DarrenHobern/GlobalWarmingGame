@@ -10,7 +10,7 @@ public class GameController : MonoBehaviour {
     [SerializeField] int numberOfMaps = 1;
 
     GameHexMapGenerator mapGenerator;
-    List<HexMap> maps = new List<HexMap>();
+    List<HexMap<Environment>> maps = new List<HexMap<Environment>>();
 
     DisasterSpawner disasterSpawner;
     private int diasterSpawnInterval = 3;
@@ -23,8 +23,9 @@ public class GameController : MonoBehaviour {
         {
             maps.Add(mapGenerator.GenerateMap(i*100)); // TODO remove magic number and pick a real offset
         }
-
+        Debug.Assert(maps[0] != null);
         disasterSpawner.InitHexMap(maps[0]); // TODO allow for multiple maps
+        disasterSpawner.SpawnDisaster(Vector3.zero);
     
 	}
 
