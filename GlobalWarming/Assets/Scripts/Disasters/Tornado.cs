@@ -7,13 +7,12 @@ using Wunderwunsch.HexMapLibrary;
 public class Tornado : MonoBehaviour {
 
     [SerializeField] float moveSpeed = 1f;
-    private HexPosition hexPosition;
+    
     private Vector3 direction = Vector3.forward;
     private ParticleSystem particles;
 
     private void Start()
     {
-        hexPosition = GetComponent<HexPosition>();
         particles = GetComponentInChildren<ParticleSystem>();
     }
 

@@ -19,7 +19,7 @@ public enum EnvironmentType
 
 public class Environment : MonoBehaviour {
 
-    Dictionary<Element, float> ElemResistance;
+    //Dictionary<Element, float> ElemResistance;
     [SerializeField] int humanPopulation = 100; // we have the people of course
     [SerializeField] int floraPopulation = 100; // plants
     [SerializeField] int faunaPopulation = 100; // animals

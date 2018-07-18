@@ -12,15 +12,27 @@ public class GameController : MonoBehaviour {
     GameHexMapGenerator mapGenerator;
     List<HexMap> maps = new List<HexMap>();
 
+    DisasterSpawner disasterSpawner;
+    private int diasterSpawnInterval = 3;
+
 	// Use this for initialization
 	void Start () {
         mapGenerator = GetComponent<GameHexMapGenerator>();
+        disasterSpawner = GetComponent<DisasterSpawner>();
         for (int i = 0; i < numberOfMaps; i++)
         {
             maps.Add(mapGenerator.GenerateMap(i*100)); // TODO remove magic number and pick a real offset
         }
+
+        disasterSpawner.InitHexMap(maps[0]); // TODO allow for multiple maps
+    
 	}
-	
+
+    private void Update()
+    {
+        // TODO repeatedly spawn disasters
+    }
+
     /// <summary>
     /// Returns the map that the player is on based on their position.
     /// Null if the player is not on a map.
@@ -29,7 +41,7 @@ public class GameController : MonoBehaviour {
     /// </summary>
     /// <param name="position"></param>
     /// <returns>The map the player is on</returns>
-	public HexMap<Environment> FindPlayerMap(Vector3 position)
+    public HexMap<Environment> FindPlayerMap(Vector3 position)
     {
         foreach (HexMap<Environment> map in maps)
         {
