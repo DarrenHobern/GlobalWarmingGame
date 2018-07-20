@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour {
 
     [SerializeField] float moveSpeed = 2f;
     [SerializeField] GameObject tileMarker;
+    [SerializeField] Collider cursorCollider;
 
     private GameController gameController;
     private HexMap<Environment> hexMap;
@@ -16,13 +17,16 @@ public class PlayerController : MonoBehaviour {
     private Vector3Int playerTilePosition;
     private bool controlEnabled = true;
 
+    private GameObject target;
+
 	// Use this for initialization
 	void Start () {
         gameController = FindObjectOfType<GameController>();
         hexMap = gameController.FindPlayerMap(transform.position);
-        Debug.Assert(hexMap != null);  // This wont always be true need to fix TODO
+        Debug.Assert(hexMap != null);
         hexPosition = GetComponentInChildren<HexPosition>();
         hexPosition.Init(hexMap);
+
     }
 	
 	// Update is called once per frame
@@ -81,5 +85,43 @@ public class PlayerController : MonoBehaviour {
                 print(t.Data.GetEnvironmentStats());
             }
         }
+        if (actionButton)
+        {
+            if (target != null)
+            {
+                Disaster disasterTarget = target.GetComponent<Disaster>();
+                if (disasterTarget != null)
+                {
+                    disasterTarget.DamageDisaster(10);
+                    print(disasterTarget.Health + " health remaining");
+                }
+            }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (target != null) { return; }
+        if(other.CompareTag("Targetable"))
+        {
+            try
+            {
+                target = other.gameObject;
+                print("Aquiring target: " + target.name);
+
+            } catch
+            {
+                target = null;
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other == target)
+        {
+            print("Losing target: " + target.name);
+            target = null;
+        }            
     }
 }

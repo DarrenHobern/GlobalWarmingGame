@@ -19,10 +19,15 @@ using Wunderwunsch.HexMapLibrary.Generic;
 
 //}
 
+[RequireComponent(typeof(Collider))]
 public class Disaster : MonoBehaviour {
 
-    private HexMap<Environment> hexMap;
+    public HexPosition Position { get; private set; }
     [SerializeField] private int radius = 0;
+    [SerializeField] private int strength = 1;
+    [SerializeField] private int health = 40;
+    public int Health { get; private set; }
+
     public int Radius
     {
         get
@@ -34,8 +39,6 @@ public class Disaster : MonoBehaviour {
             this.radius = value;
         }
     }
-
-    [SerializeField] private int strength = 1;
     public int Strength
     {
         get
@@ -48,11 +51,15 @@ public class Disaster : MonoBehaviour {
         }
     }
 
-    public HexPosition Position { get; private set; }
+    private HexMap<Environment> hexMap;
+    private Collider interactableZone;
+
 
     private void Start()
     {
         Position = GetComponent<HexPosition>();
+        interactableZone = GetComponent<Collider>();
+        Debug.Assert(interactableZone.isTrigger);
     }
     private void Update()
     {
@@ -87,9 +94,10 @@ public class Disaster : MonoBehaviour {
         foreach (Vector3Int tilePos in affectedTiles)
         {
             // get the environment type
-            print(hexMap.Tiles[hexMap.TileIndexByPosition[tilePos]].Data.GetEnvironmentStats());
+            Environment tileEnv = hexMap.Tiles[hexMap.TileIndexByPosition[tilePos]].Data;
             // deal damage to the populations and tile
-            
+            tileEnv.DealDamage(strength);
+            print(tileEnv.GetEnvironmentStats());
         }
     }
 
@@ -101,8 +109,8 @@ public class Disaster : MonoBehaviour {
     /// <param name="amount">The amount to reduce the strength of the disaster</param>
     public void DamageDisaster(int amount)
     {
-        Strength -= amount;
-        if (Strength <= 0)
+        health -= amount;
+        if (health <= 0)
         {
             Dissipate();
         }

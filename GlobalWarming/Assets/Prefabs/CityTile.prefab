@@ -187,5 +187,5 @@ MonoBehaviour:
   floraPopulation: 0
   faunaPopulation: 0
   regionName: Wellington
-  health: 100
+  maxHealth: 100
   type: 0

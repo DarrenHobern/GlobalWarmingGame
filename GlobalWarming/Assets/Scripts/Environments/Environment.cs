@@ -4,10 +4,10 @@ using UnityEngine;
 
 public enum TileStatus
 {
-    OPTIMAL,
-    FUNCTIONAL,
-    DAMAGED,
-    DESTROYED
+    OPTIMAL = 100,
+    FUNCTIONAL = 89,
+    DAMAGED = 49,
+    DESTROYED = 19
 }
 
 public enum EnvironmentType
@@ -23,10 +23,12 @@ public class Environment : MonoBehaviour {
     [SerializeField] int humanPopulation = 100; // we have the people of course
     [SerializeField] int floraPopulation = 100; // plants
     [SerializeField] int faunaPopulation = 100; // animals
-    [SerializeField] string regionName;
-    [SerializeField] int health;
+    [SerializeField] string regionName = "";
+    [SerializeField] int maxHealth = 1000;
     [SerializeField] EnvironmentType type = EnvironmentType.WILDERNESS;
+
     private TileStatus status = TileStatus.OPTIMAL;
+    private int health;
 
     public string GetEnvironmentStats()
     {
@@ -34,4 +36,33 @@ public class Environment : MonoBehaviour {
                                       humanPopulation, floraPopulation, faunaPopulation, status.ToString());
         return output;
     }
+
+
+    public void DealDamage(int amount)
+    {
+        health -= amount;
+        UpdateStatus();
+    }
+
+    private void UpdateStatus()
+    {
+        float hpPercent = health / maxHealth;
+        if(hpPercent < (int)TileStatus.DESTROYED/100)
+        {
+            status = TileStatus.DESTROYED;
+        }
+        else if(hpPercent < (int)TileStatus.DAMAGED/100)
+        {
+            status = TileStatus.DAMAGED;
+        }
+        else if(hpPercent < (int)TileStatus.FUNCTIONAL/100)
+        {
+            status = TileStatus.FUNCTIONAL;
+        }
+        else
+        {
+            status = TileStatus.OPTIMAL;
+        }
+    }
+
 }

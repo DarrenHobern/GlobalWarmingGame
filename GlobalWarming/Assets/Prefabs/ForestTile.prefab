@@ -183,7 +183,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7a393bdf4b58bd4d9ae2bd80bd93233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  population: 0
+  humanPopulation: 100
+  floraPopulation: 100
+  faunaPopulation: 100
   regionName: Amazon
-  health: 0
+  maxHealth: 50
   type: 2

@@ -15,15 +15,15 @@ public class Tornado : MonoBehaviour {
     private void Start()
     {
         particles = GetComponentInChildren<ParticleSystem>();
+        direction = new Vector3(Random.Range(-1, 1), 0f, Random.Range(-1, 1));
     }
 
     private void Update()
     {
-        float xVar = Random.Range(-0.5f, 0.5f);
-        float zVar = Random.Range(-0.5f, 0.5f);
-        direction = new Vector3(direction.x + xVar, direction.y, direction.z + zVar);
+        
         transform.Translate(direction*moveSpeed*Time.deltaTime);
-        // TODO fix this so its not super wonky
+        Debug.DrawLine(transform.position, direction * moveSpeed);
         // TODO connect the speed of the tornado to the speed of the particles
+        
     }
 }
