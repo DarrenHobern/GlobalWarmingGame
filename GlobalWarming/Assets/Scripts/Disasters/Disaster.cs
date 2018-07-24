@@ -20,7 +20,7 @@ using Wunderwunsch.HexMapLibrary.Generic;
 //}
 
 [RequireComponent(typeof(Collider))]
-public class Disaster : MonoBehaviour {
+public class Disaster : Targetable {
 
     public HexPosition Position { get; private set; }
     [SerializeField] private int radius = 0;
@@ -97,7 +97,22 @@ public class Disaster : MonoBehaviour {
             Environment tileEnv = hexMap.Tiles[hexMap.TileIndexByPosition[tilePos]].Data;
             // deal damage to the populations and tile
             tileEnv.DealDamage(strength);
-            print(tileEnv.GetEnvironmentStats());
+            //print(tileEnv.GetEnvironmentStats());
+        }
+    }
+
+    public override void Channel(float power)
+    {
+        // visual updates, sfx, etc
+        // weaken the strength of the disaster, for a tornado it slows down
+        // earthquake it has less/weaker aftershocks
+        // fire weaker/spreadslower
+        // flood weaker/slower
+        // 
+        channelTime += power;
+        if (channelTime >= channelDuration)
+        {
+            Dissipate();
         }
     }
 

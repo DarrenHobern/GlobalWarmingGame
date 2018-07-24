@@ -16,14 +16,13 @@ public class PlayerController : MonoBehaviour {
     private HexPosition hexPosition;
     private Vector3Int playerTilePosition;
     private bool controlEnabled = true;
-
-    private GameObject target;
+    private bool channelling = false;
+    private Targetable target;
 
 	// Use this for initialization
 	void Start () {
         gameController = FindObjectOfType<GameController>();
         hexMap = gameController.FindPlayerMap(transform.position);
-        Debug.Assert(hexMap != null);
         hexPosition = GetComponentInChildren<HexPosition>();
         hexPosition.Init(hexMap);
 
@@ -37,6 +36,10 @@ public class PlayerController : MonoBehaviour {
             //ProcessCamera();
             ProcessActions();
         }
+        if (channelling)
+        {
+            ProcessChannel();  // TODO change this to take the stats of the player
+        }
 	}
 
     private void ProcessMovement()
@@ -47,6 +50,11 @@ public class PlayerController : MonoBehaviour {
         // Only do things if there is an input
         if (Mathf.Abs(xThrow) > Mathf.Epsilon || Mathf.Abs(yThrow) > Mathf.Epsilon)
         {
+            // If you move while channelling then cancel the channel
+            if (channelling)
+            {
+                channelling = false;
+            }
 
             float xOffset = xThrow * moveSpeed * Time.deltaTime;
             float yOffset = yThrow * moveSpeed * Time.deltaTime;
@@ -55,7 +63,6 @@ public class PlayerController : MonoBehaviour {
             transform.Translate(movementVector, Space.World);
             transform.rotation = Quaternion.LookRotation(movementVector.normalized);
         }
-
 
         tileMarker.transform.position = hexPosition.GetRealPosition();
 
@@ -89,14 +96,17 @@ public class PlayerController : MonoBehaviour {
         {
             if (target != null)
             {
-                Disaster disasterTarget = target.GetComponent<Disaster>();
-                if (disasterTarget != null)
-                {
-                    disasterTarget.DamageDisaster(10);
-                    print(disasterTarget.Health + " health remaining");
-                }
+                channelling = true;
             }
         }
+    }
+
+    private void ProcessChannel()
+    {
+        if (target == null) { return; }
+
+        target.Channel(1f);
+        // TODO any visuals on the player associated with channelling
     }
 
     private void OnTriggerEnter(Collider other)
@@ -106,7 +116,7 @@ public class PlayerController : MonoBehaviour {
         {
             try
             {
-                target = other.gameObject;
+                target = other.GetComponent<Targetable>();
                 print("Aquiring target: " + target.name);
 
             } catch
